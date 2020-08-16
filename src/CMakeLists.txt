@@ -1,28 +1,56 @@
-function(BUILD_PROJECT PROJNAME)
-  set(TARGET_PROJECT_DIR "${CMAKE_CURRENT_LIST_DIR}/${PROJNAME}")
+# ------------------------------------------------------------------------------
+# Configure Main Projects
+# ------------------------------------------------------------------------------
+add_executable(${TARGET_PROJECT})
+set_property(TARGET ${TARGET_PROJECT} PROPERTY OUTPUT_NAME ${PROJECT_NAME})
 
-  if (EXISTS "${TARGET_PROJECT_DIR}/common.h.in")
-    configure_file("${TARGET_PROJECT_DIR}/common.h.in"
-                   "${TARGET_PROJECT_DIR}/common.h" @ONLY)
-  endif()
+add_subdirectory(${TARGET_PROJECT})
 
-  # Source files
-  file(GLOB SOURCE_FILES "${PROJNAME}/*.cpp" "${PROJNAME}/*.h")
-  file(GLOB SHADER_FILES "${PROJNAME}/shaders/*.vert" "${PROJNAME}/shaders/*.frag")
+target_include_directories(${TARGET_PROJECT} PRIVATE ${COMMON_INCLUDE_DIRS})
 
-  include_directories(${ALL_INCLUDE_DIRS})
-  add_executable(${PROJNAME} ${SOURCE_FILES} ${SHADER_FILES})
-  target_link_libraries(${PROJNAME} ${ALL_LIBRARIES})
+# ------------------------------------------------------------------------------
+# Set compiler options
+# ------------------------------------------------------------------------------
 
-  set_target_properties(${PROJNAME} PROPERTIES FOLDER "Contents")
+target_compile_features(${TARGET_PROJECT} PUBLIC cxx_std_14)
+target_compile_options(${TARGET_PROJECT} PUBLIC
+    # warnings
+    $<$<CXX_COMPILER_ID:Clang>:-Wall -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic>
+    $<$<CXX_COMPILER_ID:GCC>:-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused>
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>
 
-  source_group("Source Files" FILES ${SOURCE_FILES})
-  source_group("Shader Files" FILES ${SHADER_FILES})
-endfunction(BUILD_PROJECT)
+    # flags for each build type
+    $<$<CXX_COMPILER_ID:Clang>:
+        $<$<CONFIG:Release>:-O3>                  # Release
+        $<$<CONFIG:Debug>:-O0 -g>                 # Debug
+        $<$<CONFIG:RelWithDebgInfo>:-O3 -g>       # RelWithDebInfo
+    >
+    $<$<CXX_COMPILER_ID:GCC>:
+        $<$<CONFIG:Release>:-O3>                  # Release
+        $<$<CONFIG:Debug>:-O0 -g>                 # Debug
+        $<$<CONFIG:RelWithDebgInfo>:-O3 -g>       # RelWithDebInfo
+    >
 
-file(GLOB SUBDIR_LIST RELATIVE ${CMAKE_CURRENT_LIST_DIR} "*")
-foreach(SUBDIR ${SUBDIR_LIST})
-  if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${SUBDIR}")
-    BUILD_PROJECT(${SUBDIR})
-  endif()
-endforeach()
+    $<$<CXX_COMPILER_ID:MSVC>: 
+        $<$<CONFIG:Release>:/O2 /Zi /MP>          # Release
+        $<$<CONFIG:Debug>:/Od /ZI /MP>            # Debug
+        $<$<CONFIG:RelWithDebgInfo>:/O2 /ZI /MP>  # RelWithDebInfo
+    >
+)
+
+target_compile_definitions(${TARGET_PROJECT} PUBLIC
+    $<$<CONFIG:Debug>:DEBUG>          # Debug
+    $<$<NOT:$<CONFIG:Debug>>:NDEBUG>  # else
+)
+
+# ------------------------------------------------------------------------------
+# Post Process (copy shared files)
+# ------------------------------------------------------------------------------
+
+# These are run every time the main project is built:
+add_custom_target(${PROJECT_NAME} ALL)
+
+# Tell Visual Studio how to start the application:
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:${TARGET_PROJECT}>
+    VS_DEBUGGER_COMMAND $<TARGET_FILE:${TARGET_PROJECT}>)
