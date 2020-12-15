@@ -2,7 +2,7 @@
 # Configure Main Projects
 # ------------------------------------------------------------------------------
 add_executable(${TARGET_PROJECT})
-set_property(TARGET ${TARGET_PROJECT} PROPERTY OUTPUT_NAME ${PROJECT_NAME})
+set_target_properties(${TARGET_PROJECT} PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 
 add_subdirectory(${TARGET_PROJECT})
 
