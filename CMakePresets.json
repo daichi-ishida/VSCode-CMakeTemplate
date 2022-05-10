@@ -9,7 +9,15 @@
             "installDir": "${sourceDir}/install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_CUDA_COMPILER": {
+                    "value": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.6/bin/nvcc.exe",
+                    "type": "FILEPATH"
+                },
+                "CMAKE_TOOLCHAIN_FILE": {
+                    "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                     "type": "FILEPATH"
+                  }
             },
             "condition": {
                 "type": "equals",
@@ -59,7 +67,6 @@
         },
         {
             "name": "clang-linux",
-            "hidden": true,
             "displayName": "Configure with Clang for Linux",
             "description": "Sets Ninja generator, build and install directory",
             "generator": "Ninja Multi-Config",
@@ -69,23 +76,22 @@
               "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/clang.cmake",
               "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
             }
-        },
+        }
+    ],
+    "buildPresets": [
         {
-            "name": "clang-linux-debug",
+            "name": "debug",
             "description": "Debug build with Clang for Linux",
             "displayName": "Debug Clang Linux",
-            "inherits": "clang-linux",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+            "configurePreset": "clang-linux",
+            "configuration": "Debug"
         },
         {
-            "name": "clang-linux-release",
+            "name": "release",
             "description": "Release build with Clang for Linux",
             "displayName": "Release Clang Linux",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
+            "configurePreset": "clang-linux",
+            "configuration": "Release"
         }
     ]
 }
