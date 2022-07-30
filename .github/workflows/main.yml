@@ -23,15 +23,11 @@ jobs:
       matrix:
         config:
           - { name: "Windows MSVC", os: windows-latest, cc: "cl", cxx: "cl" }
-          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
+          - { name: "Ubuntu gcc", os: ubuntu-latest, cc: "clang", cxx: "g++" }
           - { name: "MacOS clang", os: macos-latest, cc: "clang", cxx: "clang++" }
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # use ninja-build
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@v1.1
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
@@ -42,5 +38,5 @@ jobs:
           build-dir: ${{ runner.workspace }}/build
           cc: ${{ matrix.config.cc }}
           cxx: ${{ matrix.config.cxx }}
-          configure-options: -G Ninja
+          configure-options: -DCMAKE_MAKE_PROGRAM=ninja -G "Ninja Multi-Config"
           build-type: Release
