@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
 
-set(PROJECT_NAME test_project)
-set(TARGET_PROJECT "hello")
+set(PROJECT_NAME your_project_name)
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # ------------------------------------------------------------------------------
