@@ -1,5 +1,4 @@
 # C++ cross platform template project for VScode
-[![CI](https://github.com/daichi-ishida/VSCode-CMakeTemplate/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/daichi-ishida/VSCode-CMakeTemplate/actions/workflows/main.yml)
 
 # Usage
 When you create new project, make new directory under the *src* directory and set CMakeLists.txt to link library.
