@@ -26,6 +26,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: CMake with Ninja
-        run: cmake -DCMAKE_MAKE_PROGRAM=ninja -S .. -B ./linux-gcc -G "Ninja Multi-Config"
+        run: cmake -DCMAKE_MAKE_PROGRAM=ninja -S ${{ runner.workspace }} -B ${{ runner.workspace }}/build/linux-gcc -G "Ninja Multi-Config"
       - name: Build
-        run: cmake --build ./linux-gcc --config Release --target all
+        run: cmake --build ${{ runner.workspace }}/build/linux-gcc/linux-gcc --config Release --target all
