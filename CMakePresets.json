@@ -33,6 +33,10 @@
                 "value": "x64",
                 "strategy": "external"
             },
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
@@ -41,6 +45,14 @@
             "name": "win-x64-release",
             "displayName": "win x64 Release",
             "inherits": "win-x64-debug",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            },
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
