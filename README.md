@@ -1,9 +1,81 @@
 # C++ cross platform template project for VScode
+This template can manage multiple apps, which is great if you want to switch apps by code!
 
-# Usage
-When you create new project, make new directory under the *src* directory and set CMakeLists.txt to link library.
+## File Tree
+The file tree below illustrate how you develop using this cmake project structure
+```
+.
+├── .vscode                  ### Config for dev-env with vscode
+├── cmake                    ### Use this if you want to define something with CMake
+│   └── clang.cmake          ### is used for clang build
+├── common                   ### is useful when you want to place header-only library
+├── src
+│   ├── AAA                  ### An application will be generated as "AAA_APP"
+│   │   ├── main.cpp         ### Codes for AAA
+│   │   └── CMakeLists.txt   ### Edit this to link external libraries to AAA
+│   └── BBB                  ### An application will be generated as "BBB_APP"
+│   │   ├── main.cpp         ### Codes for BBB
+│   │   └── CMakeLists.txt
+│   └── CMakeLists.txt       ### You don't have to edit this
+├── CMakePresets.json        ### CMake configuration presets (will be used to build this project with command)
+├── CMakeLists.txt           ### Global setting for all applications (will be helpful when you use external submodule)
+:
+```
 
-This template can manage multiple projects, which is great if you want to switch projects by code you want to try!
+## How to build
+- [Windows](#windows)
+- [Linux](#linux)
+
+### Windows
+- `vcpkg` is recommended to install/find library
+- **(Optional)** if you make use of `preset` like `win-x64-release` in cmake, [Ninja](https://github.com/ninja-build/ninja) build system is required, which makes your building faster
+
+#### **Method 1**
+Using CMake GUI will be easiest choice because simply select the appropriate settings for your environment will automatically resolve Path for Visual C++ Compiler or toolchain.
+
+#### **Method 2**
+Open with **Visual Studio Code** and choose `win-x64-Release` preset and execute
+
+#### **Method 3**
+Other option is using **Visual Studio 2022 Developer Command Prompt** and run commands below
+```sh
+# in Visual Studio 2022 Developer Command Prompt
+cmake --preset win-x64-release
+cd build\win-x64-release
+cmake --build .
+
+# replace <your_app> to your application name
+src\<your_app>_APP.exe
+```
+
+### Linux
+- if you use `gcc/g++`, choose `gcc-linux-release` as CMake preset
+- if you prefer to use `clang++`, be sure to have installed [Ninja](https://github.com/ninja-build/ninja) and choose `clang-linux` as CMake preset
+
+#### **gcc/g++**
+The preset name for `gcc/g++` is `gcc-linux-release`
+
+run commands below
+```sh
+cmake --preset gcc-linux-release
+cd build/gcc-linux-release
+cmake --build .
+
+# replace <your_app> to your application name
+./src/<your_app>_APP
+```
+
+#### **clang++**
+The preset name for `clang++` is `clang-linux`
+
+run commands below
+```sh
+cmake --preset clang-linux
+cmake --build --preset release
+
+# replace <your_app> to your application name
+./build/clang-linux/src/Release/<your_app>_APP
+```
 
 # License
 These codes are licensed under CC0.
