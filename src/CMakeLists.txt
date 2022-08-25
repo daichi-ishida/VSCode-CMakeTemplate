@@ -1,11 +1,13 @@
-function(BUILD_TARGET TARGET)
+function(BUILD_TARGET SUBDIR)
     # ------------------------------------------------------------------------------
     # Configure Main Projects
     # ------------------------------------------------------------------------------
+    set(TARGET "${SUBDIR}_APP")
+    message(STATUS "Target: ${TARGET}")
     add_executable(${TARGET})
     set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${TARGET})
 
-    add_subdirectory(${TARGET})
+    add_subdirectory(${SUBDIR})
 
     target_include_directories(${TARGET} PRIVATE ${COMMON_INCLUDE_DIRS})
 
