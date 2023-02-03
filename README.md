@@ -9,16 +9,17 @@ The file tree below illustrate how you develop using this cmake project structur
 ├── cmake                    ### Use this if you want to define something with CMake
 │   └── clang.cmake          ### is used for clang build
 ├── common                   ### is useful when you want to place header-only library
+├── data                     ### is useful when you want to load data from your application
 ├── src
-│   ├── AAA                  ### An application will be generated as "AAA_APP"
+│   ├── AAA                  ### An application for "AAA"
 │   │   ├── main.cpp         ### Codes for AAA
 │   │   └── CMakeLists.txt   ### Edit this to link external libraries to AAA
-│   └── BBB                  ### An application will be generated as "BBB_APP"
+│   └── BBB                  ### An application for "BBB"
 │   │   ├── main.cpp         ### Codes for BBB
 │   │   └── CMakeLists.txt
-│   └── CMakeLists.txt       ### You don't have to edit this
+│   └── CMakeLists.txt       ### is used when there are dependencies between, for example, "AAA" and "BBB".
 ├── CMakePresets.json        ### CMake configuration presets (will be used to build this project with command)
-├── CMakeLists.txt           ### Global setting for all applications (will be helpful when you use external submodule)
+├── CMakeLists.txt           ### Global setting for all applications
 :
 ```
 
@@ -45,7 +46,7 @@ cd build\win-x64-release
 cmake --build .
 
 # replace <your_app> to your application name
-src\<your_app>_APP.exe
+src\<your_app>.exe
 ```
 
 ### Linux
@@ -62,7 +63,7 @@ cd build/gcc-linux-release
 cmake --build .
 
 # replace <your_app> to your application name
-./src/<your_app>_APP
+./src/<your_app>
 ```
 
 #### **clang++**
@@ -74,7 +75,7 @@ cmake --preset clang-linux
 cmake --build --preset release
 
 # replace <your_app> to your application name
-./build/clang-linux/src/Release/<your_app>_APP
+./build/clang-linux/src/Release/<your_app>
 ```
 
 # License
