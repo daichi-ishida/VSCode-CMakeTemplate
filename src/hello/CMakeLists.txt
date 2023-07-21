@@ -1,4 +1,6 @@
-project(hello LANGUAGES CXX)
+get_filename_component(ProjectId ${CMAKE_CURRENT_LIST_DIR} NAME)
+string(REPLACE " " "_" ProjectId ${ProjectId})
+project(${ProjectId} LANGUAGES CXX)
 
 add_executable(${PROJECT_NAME})
 
